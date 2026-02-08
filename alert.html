@@ -7,7 +7,7 @@
 </head>
 
 <body>
-  <!-- Ambient animation -->
+  <!-- Ambient animation (5s) -->
   <video
     id="background"
     src="ambient_pulse.webm"
@@ -16,10 +16,98 @@
     playsinline
   ></video>
 
-  <!-- Alert text container -->
+  <!-- Alert text -->
   <div id="alert">
-    <div id="alertType">%alertType%</div>
-    <div id="username">%userName%</div>
+    <div id="alertType"></div>
+    <div id="username"></div>
+    <div id="subtext"></div>
   </div>
+
+  <script>
+    // Read #key=value&key2=value2
+    const params = new URLSearchParams(window.location.hash.substring(1));
+
+    function getParam(name) {
+      const v = params.get(name);
+      if (!v) return "";
+      // Streamer.bot may insert values without URL encoding; handle both.
+      try {
+        return decodeURIComponent(v.replace(/\+/g, " ")).trim();
+      } catch {
+        return v.replace(/\+/g, " ").trim();
+      }
+    }
+
+    const alertTypeRaw = getParam("alertType");   // e.g. TwitchFollow, TwitchSub, TwitchCheer...
+    const platform     = getParam("platform");    // e.g. twitch
+    const userName     = getParam("userName");    // your common working value
+
+    // Optional extras (only used when you include them in the URL)
+    const bits      = getParam("bits");           // TwitchCheer: bits
+    const gifts     = getParam("gifts");          // TwitchGiftBomb: gifts
+    const tier      = getParam("tier");           // Sub/Gift types: tier
+    const recipient = getParam("recipient");      // TwitchGiftSub: recipientUserName
+    const reward    = getParam("reward");         // TwitchRewardRedemption: rewardName
+    const cost      = getParam("cost");           // TwitchRewardRedemption: rewardCost
+    const anonymous = getParam("anonymous");      // TwitchGiftBomb: anonymous
+
+    // Map Streamer.bot __source -> your displayed title
+    const titleMap = {
+      TwitchFollow: "NEW FOLLOWER",
+      TwitchSub: "NEW SUBSCRIBER",
+      TwitchCheer: "NEW CHEER",
+      TwitchGiftSub: "GIFTED SUB",
+      TwitchGiftBomb: "GIFT BOMB",
+      TwitchRewardRedemption: "REDEEMED"
+    };
+
+    function prettifyFallback(s) {
+      return (s || "ALERT")
+        .replace(/([a-z])([A-Z])/g, "$1 $2")
+        .replace(/[_-]+/g, " ")
+        .trim()
+        .toUpperCase();
+    }
+
+    const title = titleMap[alertTypeRaw] || prettifyFallback(alertTypeRaw);
+
+    // Build optional subtext (only shows if we actually have data)
+    let subtext = "";
+
+    if (alertTypeRaw === "TwitchCheer" && bits) {
+      subtext = `${bits} BITS`;
+    }
+
+    if (alertTypeRaw === "TwitchGiftBomb") {
+      const anonTag = (anonymous && anonymous.toLowerCase() === "true") ? " (ANON)" : "";
+      if (gifts) subtext = `${gifts} GIFTS${anonTag}`;
+      else if (anonTag) subtext = `GIFT BOMB${anonTag}`;
+      if (tier) subtext += subtext ? ` • ${tier.toUpperCase()}` : tier.toUpperCase();
+    }
+
+    if (alertTypeRaw === "TwitchGiftSub") {
+      // In your data: userName is the gifter, recipientUserName exists
+      if (recipient) subtext = `TO ${recipient.toUpperCase()}`;
+      if (tier) subtext += subtext ? ` • ${tier.toUpperCase()}` : tier.toUpperCase();
+    }
+
+    if (alertTypeRaw === "TwitchSub" && tier) {
+      subtext = tier.toUpperCase();
+    }
+
+    if (alertTypeRaw === "TwitchRewardRedemption") {
+      if (reward && cost) subtext = `${reward} • ${cost} CP`;
+      else if (reward) subtext = reward;
+      else if (cost) subtext = `${cost} CP`;
+    }
+
+    // Apply to DOM
+    document.getElementById("alertType").textContent = title;
+    document.getElementById("username").textContent = userName;
+    document.getElementById("subtext").textContent = subtext;
+
+    // Optional hook (does nothing unless you style it later)
+    if (platform) document.body.classList.add(`platform-${platform}`);
+  </script>
 </body>
 </html>
