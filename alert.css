@@ -41,10 +41,9 @@ html, body {
   transform: translateX(-50%);
   text-align: center;
   opacity: 0;
-
   font-family: "Segoe UI Semibold", "Segoe UI", Arial, sans-serif;
   text-shadow: 0 0 10px var(--shadow);
-
+  --maxOpacity: 1; /* default */
   animation: alertFade 5s cubic-bezier(0.33, 0, 0.67, 1) forwards;
 }
 
@@ -54,7 +53,7 @@ html, body {
   font-size: 44px;
   color: var(--pink);
   letter-spacing: 1.5px;
-  opacity: 0.9;
+  --maxOpacity: 0.9;
   animation-delay: 0s;
 }
 
@@ -63,24 +62,16 @@ html, body {
   top: 640px;
   font-size: 56px;
   color: var(--pink);
-  letter-spacing: 1.5px;
   animation-delay: 0.12s;
 }
 
 /* PLATFORM */
 #platformLine {
-  position: absolute;
-  left: 960px;
-  top: 690px; /* between username and subtext */
-  transform: translateX(-50%);
-  text-align: center;
-  opacity: 0.85;
-  font-family: "Segoe UI Semibold", "Segoe UI", Arial, sans-serif;
+  top: 700px; /* between username and platform */
   font-size: 24px;
   color: var(--pink);
   letter-spacing: 2px;
-  text-shadow: 0 0 10px var(--shadow);
-  animation: alertFade 5s cubic-bezier(0.33, 0, 0.67, 1) forwards;
+  --maxOpacity: 0.85;
   animation-delay: 0.20s;
 }
 
@@ -90,15 +81,15 @@ html, body {
   font-size: 32px;
   color: var(--purple);
   letter-spacing: 1px;
+  --maxOpacity: 0.85;
   animation-delay: 0.28s;
-  opacity: 0.85;
 }
 
 /* 5s fade timing aligned to your AE keyframes */
 @keyframes alertFade {
-  0%   { opacity: 0; }
-  26%  { opacity: 0; } /* ~1.33s */
-  33%  { opacity: 1; } /* ~1.7s */
-  87%  { opacity: 1; } /* ~4.33s */
-  100% { opacity: 0; } /* ~4.98s */
+  0%   {opacity: 0;}
+  26%  {opacity: 0;}
+  33%  {opacity: var(--maxOpacity);}
+  87%  {opacity: var(--maxOpacity);}
+  100% {opacity: 0;}
 }
