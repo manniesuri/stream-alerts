@@ -67,13 +67,31 @@ html, body {
   animation-delay: 0.12s;
 }
 
-/* SUBTEXT (optional) */
+/* PLATFORM */
+#platformLine {
+  position: absolute;
+  left: 960px;
+  top: 690px; /* between username and subtext */
+  transform: translateX(-50%);
+  text-align: center;
+  opacity: 0.85;
+  font-family: "Segoe UI Semibold", "Segoe UI", Arial, sans-serif;
+  font-size: 24px;
+  color: var(--pink);
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px var(--shadow);
+  animation: alertFade 5s cubic-bezier(0.33, 0, 0.67, 1) forwards;
+  animation-delay: 0.20s;
+}
+
+/* SUBTEXT */
 #subtext {
-  top: 740px;
+  top: 780px;
   font-size: 32px;
   color: var(--purple);
   letter-spacing: 1px;
   animation-delay: 0.28s;
+  opacity: 0.85;
 }
 
 /* 5s fade timing aligned to your AE keyframes */

@@ -19,6 +19,7 @@
   <div id="alert">
     <div id="alertType"></div>
     <div id="username"></div>
+    <div id="platformLine"></div>
     <div id="subtext"></div>
   </div>
 
@@ -73,6 +74,13 @@
       TTFollow: "A NEW SOUL ARRIVES",
       TTGift: "AN OFFERING WAS MADE",
       TTSub: "A BOND IS FORMED"
+    };
+
+    //Map platform --> platformLine
+    const platformMap = {
+      twitch: "FROM TWITCH",
+      tiktok: "FROM TIKTOK",
+      youtube: "FROM YOUTUBE"
     };
 
     function prettifyFallback(s) {
@@ -147,6 +155,10 @@
     document.getElementById("alertType").textContent = title;
     document.getElementById("username").textContent = displayUser;
     document.getElementById("subtext").textContent = subtext;
+    const platformText =
+      platformMap[platform?.toLowerCase?.()] ||
+      (platform ? `ENERGY CHANNEL: ${platform.toUpperCase()}` : "");
+    document.getElementById("platformLine").textContent = platformText;
 
     if (platform) document.body.classList.add(`platform-${platform}`);
   </script>
