@@ -67,7 +67,7 @@ html, body {
 
 /* PLATFORM */
 #platformLine {
-  top: 700px; /* between username and platform */
+  top: 710px; /* between username and platform */
   font-size: 24px;
   color: var(--pink);
   letter-spacing: 2px;
