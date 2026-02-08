@@ -5,32 +5,21 @@
   <title>Stream Alert</title>
   <link rel="stylesheet" href="alert.css" />
 </head>
+
 <body>
+  <!-- Ambient animation -->
+  <video
+    id="background"
+    src="ambient_pulse.webm"
+    autoplay
+    muted
+    playsinline
+  ></video>
 
+  <!-- Alert text container -->
   <div id="alert">
-    <video
-      id="bg"
-      src="ambient_pulse.webm"
-      autoplay
-      muted
-      playsinline>
-    </video>
-
-    <div id="text">
-      <div id="event">NEW FOLLOW</div>
-      <div id="user">username</div>
-    </div>
+    <div id="alertType">%alertType%</div>
+    <div id="username">%userName%</div>
   </div>
-
-  <script>
-    const params = new URLSearchParams(window.location.hash.slice(1));
-
-    const event = params.get("event");
-    const user = params.get("user");
-
-    if (event) document.getElementById("event").textContent = event;
-    if (user) document.getElementById("user").textContent = user;
-  </script>
-
 </body>
 </html>

@@ -1,52 +1,93 @@
+/* ---------- BASE RESET ---------- */
+
 html, body {
   margin: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
+  padding: 0;
+  width: 1920px;
+  height: 1080px;
   overflow: hidden;
-  font-family: "Arial Rounded MT Bold", sans-serif;
+  background: transparent;
 }
+
+/* ---------- BACKGROUND VIDEO ---------- */
+
+#background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* ---------- TEXT CONTAINER ---------- */
 
 #alert {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-#bg {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 1920px;
+  height: 1080px;
+  top: 0;
+  left: 0;
+  pointer-events: none;
 }
 
-#text {
+/* ---------- SHARED TEXT STYLE ---------- */
+
+.alert-text,
+#alertType,
+#username {
   position: absolute;
   left: 960px;
-  top: 580px;
   transform: translateX(-50%);
   text-align: center;
+  opacity: 0;
+
+  font-family: "Segoe UI Semibold", "Segoe UI", Arial, sans-serif;
   color: #be0078;
+
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+
+  animation: alertFade 5s cubic-bezier(0.33, 0, 0.67, 1) forwards;
 }
 
-#event {
+/* ---------- ALERT TYPE ---------- */
+
+#alertType {
+  top: 580px;
   font-size: 44px;
-  letter-spacing: 0.1em;
-  opacity: 0;
-  animation: fadeInOut 5s ease forwards;
+  letter-spacing: 1.5px;
+  opacity: 0.9;
 }
 
-#user {
+/* ---------- USERNAME ---------- */
+
+#username {
+  top: 640px;
   font-size: 56px;
-  margin-top: 12px;
-  opacity: 0;
-  animation: fadeInOut 5s ease forwards;
-  animation-delay: 0.4s;
 }
 
-@keyframes fadeInOut {
-  0%   { opacity: 0; }
-  20%  { opacity: 1; }
-  75%  { opacity: 1; }
-  100% { opacity: 0; }
+/* ---------- FADE TIMING ---------- */
+/* Matches AE Easy Ease timing perceptually */
+
+@keyframes alertFade {
+  0% {
+    opacity: 0;
+  }
+
+  26% { /* ~1.33s */
+    opacity: 0;
+  }
+
+  33% { /* ~1.7s */
+    opacity: 1;
+  }
+
+  87% { /* ~4.33s */
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
