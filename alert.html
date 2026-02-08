@@ -16,7 +16,6 @@
     playsinline
   ></video>
 
-  <!-- Alert text -->
   <div id="alert">
     <div id="alertType"></div>
     <div id="username"></div>
@@ -24,13 +23,11 @@
   </div>
 
   <script>
-    // Read #key=value&key2=value2
     const params = new URLSearchParams(window.location.hash.substring(1));
 
     function getParam(name) {
       const v = params.get(name);
       if (!v) return "";
-      // Streamer.bot may insert values without URL encoding; handle both.
       try {
         return decodeURIComponent(v.replace(/\+/g, " ")).trim();
       } catch {
@@ -38,27 +35,44 @@
       }
     }
 
-    const alertTypeRaw = getParam("alertType");   // e.g. TwitchFollow, TwitchSub, TwitchCheer...
-    const platform     = getParam("platform");    // e.g. twitch
-    const userName     = getParam("userName");    // your common working value
+    // Common
+    const alertTypeRaw = getParam("alertType");  // e.g. TwitchFollow OR TTFollow
+    const platform     = getParam("platform");  // twitch / tiktok
+    const userName     = getParam("userName");  // twitch: userName, tiktok: username OR nickname
+    const nickname     = getParam("nickname");  // tiktok: nicer display name
 
-    // Optional extras (only used when you include them in the URL)
-    const bits      = getParam("bits");           // TwitchCheer: bits
-    const gifts     = getParam("gifts");          // TwitchGiftBomb: gifts
-    const tier      = getParam("tier");           // Sub/Gift types: tier
-    const recipient = getParam("recipient");      // TwitchGiftSub: recipientUserName
-    const reward    = getParam("reward");         // TwitchRewardRedemption: rewardName
-    const cost      = getParam("cost");           // TwitchRewardRedemption: rewardCost
-    const anonymous = getParam("anonymous");      // TwitchGiftBomb: anonymous
+    // Twitch optional
+    const bits      = getParam("bits");
+    const gifts     = getParam("gifts");
+    const tier      = getParam("tier");
+    const recipient = getParam("recipient");
+    const reward    = getParam("reward");
+    const cost      = getParam("cost");
+    const anonymous = getParam("anonymous");
 
-    // Map Streamer.bot __source -> your displayed title
+    // TikTok optional
+    const giftName    = getParam("giftName");
+    const coins       = getParam("coins");       // often per gift
+    const repeatCount = getParam("repeatCount"); // streak/quantity
+    const subMonth    = getParam("subMonth");
+
+    // Prefer TikTok nickname if present
+    const displayUser = (nickname || userName || "").trim();
+
+    // Map event -> title (Twitch + TikTok)
     const titleMap = {
-      TwitchFollow: "NEW FOLLOWER",
-      TwitchSub: "NEW SUBSCRIBER",
-      TwitchCheer: "NEW CHEER",
-      TwitchGiftSub: "GIFTED SUB",
-      TwitchGiftBomb: "GIFT BOMB",
-      TwitchRewardRedemption: "REDEEMED"
+      // Twitch
+      TwitchFollow: "A NEW SOUL ARRIVES",
+      TwitchSub: "A BOND IS FORMED",
+      TwitchCheer: "ENERGY WAS SHARED",
+      TwitchGiftSub: "A BLESSING WAS GIVEN",
+      TwitchGiftBomb: "BLESSINGS WERE SHARED",
+      TwitchRewardRedemption: "FATE WAS ALTERED",
+
+      // TikTok
+      TTFollow: "A NEW SOUL ARRIVES",
+      TTGift: "AN OFFERING WAS MADE",
+      TTSub: "A BOND IS FORMED"
     };
 
     function prettifyFallback(s) {
@@ -71,13 +85,15 @@
 
     const title = titleMap[alertTypeRaw] || prettifyFallback(alertTypeRaw);
 
-    // Build optional subtext (only shows if we actually have data)
+    // Build optional subtext
     let subtext = "";
 
+    // Twitch: bits
     if (alertTypeRaw === "TwitchCheer" && bits) {
-      subtext = `${bits} BITS`;
+      subtext = `${bits} ENERGY OFFERED`;
     }
 
+    // Twitch: gift bomb
     if (alertTypeRaw === "TwitchGiftBomb") {
       const anonTag = (anonymous && anonymous.toLowerCase() === "true") ? " (ANON)" : "";
       if (gifts) subtext = `${gifts} GIFTS${anonTag}`;
@@ -85,28 +101,53 @@
       if (tier) subtext += subtext ? ` • ${tier.toUpperCase()}` : tier.toUpperCase();
     }
 
+    // Twitch: gifted sub
     if (alertTypeRaw === "TwitchGiftSub") {
-      // In your data: userName is the gifter, recipientUserName exists
       if (recipient) subtext = `TO ${recipient.toUpperCase()}`;
       if (tier) subtext += subtext ? ` • ${tier.toUpperCase()}` : tier.toUpperCase();
     }
 
+    // Twitch: sub tier
     if (alertTypeRaw === "TwitchSub" && tier) {
-      subtext = tier.toUpperCase();
+      subtext = `${tier.toUpperCase()} • A BOND IS FORMED`;
     }
 
+    // Twitch: channel points
     if (alertTypeRaw === "TwitchRewardRedemption") {
       if (reward && cost) subtext = `${reward} • ${cost} CP`;
       else if (reward) subtext = reward;
       else if (cost) subtext = `${cost} CP`;
     }
 
-    // Apply to DOM
+    // TikTok: gifts
+    // Show: "ROSE ×3 • 3 COINS" (total coins if possible)
+    if (alertTypeRaw === "TTGift") {
+      const name = giftName ? giftName.toUpperCase() : "";
+      const qty = parseInt(repeatCount, 10);
+      const c = parseInt(coins, 10);
+
+      const qtyText = Number.isFinite(qty) && qty > 1 ? ` ×${qty}` : "";
+      let energyText = "";
+
+      if (Number.isFinite(c)) {
+        const total = (Number.isFinite(qty) && qty > 1) ? (c * qty) : c;
+        energyText = `${total} ENERGY`;
+      }
+
+      if (name && energyText) subtext = `${name}${qtyText} • ${energyText} OFFERED`;
+      else if (name) subtext = `${name}${qtyText}`;
+      else if (energyText) subtext = `${energyText} OFFERED`;
+    }
+
+    // TikTok: subs
+    if (alertTypeRaw === "TTSub" && subMonth) {
+      subtext = `BOUND FOR ${subMonth} MONTH${subMonth === "1" ? "" : "S"}`;
+    }
+    // Apply
     document.getElementById("alertType").textContent = title;
-    document.getElementById("username").textContent = userName;
+    document.getElementById("username").textContent = displayUser;
     document.getElementById("subtext").textContent = subtext;
 
-    // Optional hook (does nothing unless you style it later)
     if (platform) document.body.classList.add(`platform-${platform}`);
   </script>
 </body>
