@@ -48,13 +48,14 @@ html, body {
   animation: alertFade 5s cubic-bezier(0.33, 0, 0.67, 1) forwards;
 }
 
-/* ALERTTYPE */
+/* ALERT TYPE */
 #alertType {
   top: 580px;
   font-size: 44px;
   color: var(--pink);
   letter-spacing: 1.5px;
-  opacity: 0.9; /* matches your earlier preference */
+  opacity: 0.9;
+  animation-delay: 0s;
 }
 
 /* USERNAME */
@@ -62,20 +63,20 @@ html, body {
   top: 640px;
   font-size: 56px;
   color: var(--pink);
+  letter-spacing: 1.5px;
+  animation-delay: 0.12s;
 }
 
 /* SUBTEXT (optional) */
 #subtext {
-  top: 700px;
+  top: 740px;
   font-size: 32px;
   color: var(--purple);
+  letter-spacing: 1px;
+  animation-delay: 0.28s;
 }
 
-/* 5s fade timing aligned to AE:
-   - stay hidden until ~1.33s
-   - fade in quickly
-   - hold until ~4.33s
-   - fade out by end */
+/* 5s fade timing aligned to your AE keyframes */
 @keyframes alertFade {
   0%   { opacity: 0; }
   26%  { opacity: 0; } /* ~1.33s */
