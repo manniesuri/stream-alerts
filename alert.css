@@ -50,7 +50,7 @@ html, body {
 /* ALERT TYPE */
 #alertType {
   top: 580px;
-  font-size: 44px;
+  font-size: 52px;
   color: var(--pink);
   letter-spacing: 1.5px;
   --maxOpacity: 0.9;
@@ -60,7 +60,7 @@ html, body {
 /* USERNAME */
 #username {
   top: 640px;
-  font-size: 56px;
+  font-size: 64px;
   color: var(--pink);
   animation-delay: 0.12s;
 }
@@ -68,7 +68,7 @@ html, body {
 /* PLATFORM */
 #platformLine {
   top: 710px; /* between username and platform */
-  font-size: 24px;
+  font-size: 28px;
   color: var(--pink);
   letter-spacing: 2px;
   --maxOpacity: 0.85;
@@ -78,7 +78,7 @@ html, body {
 /* SUBTEXT */
 #subtext {
   top: 780px;
-  font-size: 32px;
+  font-size: 36px;
   color: var(--purple);
   letter-spacing: 1px;
   --maxOpacity: 0.85;
