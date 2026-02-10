@@ -68,7 +68,7 @@ html, body {
 /* PLATFORM */
 #platformLine {
   top: 720px; /* between username and platform */
-  font-size: 28px;
+  font-size: 32px;
   color: var(--pink);
   letter-spacing: 2px;
   --maxOpacity: 0.85;
@@ -92,4 +92,55 @@ html, body {
   33%  {opacity: var(--maxOpacity);}
   87%  {opacity: var(--maxOpacity);}
   100% {opacity: 0;}
+}
+
+/* ===============================
+   DEBUG SAFE ZONE GRID
+   Enable by adding body class: debug-grid
+================================ */
+
+#safeGrid {
+  display: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+body.debug-grid #safeGrid {
+  display: block;
+}
+
+/* Subtle grid */
+body.debug-grid #safeGrid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      to right,
+      rgba(130, 5, 179, 0.18) 0px,
+      rgba(130, 5, 179, 0.18) 1px,
+      transparent 1px,
+      transparent 80px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(190, 0, 120, 0.14) 0px,
+      rgba(190, 0, 120, 0.14) 1px,
+      transparent 1px,
+      transparent 80px
+    );
+}
+
+/* Safe zone rectangle (tweak margins per taste) */
+body.debug-grid #safeGrid::after {
+  content: "";
+  position: absolute;
+  left: 160px;
+  right: 160px;
+  top: 120px;
+  bottom: 120px;
+  border: 2px dashed rgba(201, 179, 255, 0.45);
+  box-shadow: 0 0 0 9999px rgba(0,0,0,0.05) inset;
 }
