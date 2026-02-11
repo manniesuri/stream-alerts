@@ -1,8 +1,8 @@
 html, body {
   margin: 0;
   padding: 0;
-  width: 1920px;
-  height: 1080px;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   background: transparent;
 }
@@ -12,8 +12,8 @@ html, body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 1920px;
-  height: 1080px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   pointer-events: none;
 }
@@ -23,8 +23,8 @@ html, body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 1920px;
-  height: 1080px;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 
@@ -32,12 +32,26 @@ html, body {
   --pink: #be0078;
   --purple: #8205b3;
   --shadow: rgba(0, 0, 0, 0.25);
+
+  /* NEW — responsive positioning + sizing */
+  --cx: 50%;
+  --baseY: 580px;
+
+  --typeSize: 52px;
+  --userSize: 64px;
+  --platSize: 32px;
+  --subSize: 36px;
+
+  --typeGap: 0px;
+  --userGap: 60px;
+  --platGap: 140px;
+  --subGap: 200px;
 }
 
 /* Shared text style */
 #alertType, #username, #platformLine, #subtext {
   position: absolute;
-  left: 960px;
+  left: var(--cx);
   transform: translateX(-50%);
   text-align: center;
   opacity: 0;
@@ -49,8 +63,8 @@ html, body {
 
 /* ALERT TYPE */
 #alertType {
-  top: 580px;
-  font-size: 52px;
+  top: calc(var(--baseY) + var(--typeGap));
+  font-size: var(--typeSize);
   color: var(--pink);
   letter-spacing: 1.5px;
   --maxOpacity: 0.9;
@@ -59,16 +73,16 @@ html, body {
 
 /* USERNAME */
 #username {
-  top: 640px;
-  font-size: 64px;
+  top: calc(var(--baseY) + var(--typeGap));
+  font-size: var(--typeSize);
   color: var(--pink);
   animation-delay: 0.12s;
 }
 
 /* PLATFORM */
 #platformLine {
-  top: 720px; /* between username and platform */
-  font-size: 32px;
+  top: calc(var(--baseY) + var(--typeGap));
+  font-size: var(--typeSize);
   color: var(--pink);
   letter-spacing: 2px;
   --maxOpacity: 0.85;
@@ -77,8 +91,8 @@ html, body {
 
 /* SUBTEXT */
 #subtext {
-  top: 780px;
-  font-size: 36px;
+  top: calc(var(--baseY) + var(--typeGap));
+  font-size: var(--typeSize);
   color: var(--purple);
   letter-spacing: 1px;
   --maxOpacity: 0.85;
@@ -94,53 +108,24 @@ html, body {
   100% {opacity: 0;}
 }
 
-/* ===============================
-   DEBUG SAFE ZONE GRID
-   Enable by adding body class: debug-grid
-================================ */
+/* =========================================
+   PORTRAIT (1080x1920) OVERRIDES
+   Bigger type + move the block up a bit
+   ========================================= */
+@media (max-aspect-ratio: 9/16) {
+  :root{
+    /* nudge the whole alert up so it's not too low on tall canvas */
+    --baseY: 520px;
 
-#safeGrid {
-  display: none;
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-}
+    /* scale text up for portrait readability */
+    --typeSize: 64px;
+    --userSize: 78px;
+    --platSize: 40px;
+    --subSize: 44px;
 
-body.debug-grid #safeGrid {
-  display: block;
-}
-
-/* Subtle grid */
-body.debug-grid #safeGrid::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      to right,
-      rgba(130, 5, 179, 0.18) 0px,
-      rgba(130, 5, 179, 0.18) 1px,
-      transparent 1px,
-      transparent 80px
-    ),
-    repeating-linear-gradient(
-      to bottom,
-      rgba(190, 0, 120, 0.14) 0px,
-      rgba(190, 0, 120, 0.14) 1px,
-      transparent 1px,
-      transparent 80px
-    );
-}
-
-/* Safe zone rectangle (tweak margins per taste) */
-body.debug-grid #safeGrid::after {
-  content: "";
-  position: absolute;
-  left: 160px;
-  right: 160px;
-  top: 120px;
-  bottom: 120px;
-  border: 2px dashed rgba(201, 179, 255, 0.45);
-  box-shadow: 0 0 0 9999px rgba(0,0,0,0.05) inset;
+    /* slightly more spacing */
+    --userGap: 78px;
+    --platGap: 170px;
+    --subGap: 240px;
+  }
 }
