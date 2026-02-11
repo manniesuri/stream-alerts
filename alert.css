@@ -21,50 +21,55 @@ html, body {
 /* Full-frame container */
 #alert {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-:root {
+:root{
   --pink: #be0078;
   --purple: #8205b3;
-  --shadow: rgba(0, 0, 0, 0.25);
+  --shadow: rgba(0,0,0,0.25);
 
-  /* NEW — responsive positioning + sizing */
   --cx: 50%;
-  --baseY: 580px;
 
-  --typeSize: 52px;
-  --userSize: 64px;
-  --platSize: 32px;
-  --subSize: 36px;
+  /* tuned for 1080x620 */
+  --baseY: 250px;
+
+  --typeSize: 40px;
+  --userSize: 52px;
+  --platSize: 26px;
+  --subSize: 28px;
 
   --typeGap: 0px;
-  --userGap: 60px;
-  --platGap: 140px;
-  --subGap: 200px;
+  --userGap: 52px;
+  --platGap: 120px;
+  --subGap: 165px;
 }
 
-/* Shared text style */
+/* Shared text style (centered stack) */
 #alertType, #username, #platformLine, #subtext {
-  position: absolute;
-  left: var(--cx);
-  transform: translateX(-50%);
+  position: relative;          /* no longer absolute */
+  left: auto;
+  top: auto;
+  transform: none;             /* don't translate */
+  margin: 0;                   /* we'll control spacing per-line */
+
   text-align: center;
   opacity: 0;
   font-family: "Segoe UI Semibold", "Segoe UI", Arial, sans-serif;
   text-shadow: 0 0 10px var(--shadow);
-  --maxOpacity: 1; /* default */
+  --maxOpacity: 1;
   animation: alertFade 5s cubic-bezier(0.33, 0, 0.67, 1) forwards;
 }
 
 /* ALERT TYPE */
 #alertType {
-  top: calc(var(--baseY) + var(--typeGap));
-  font-size: var(--typeSize);
+  font-size: 40px;
   color: var(--pink);
   letter-spacing: 1.5px;
   --maxOpacity: 0.9;
@@ -73,16 +78,16 @@ html, body {
 
 /* USERNAME */
 #username {
-  top: calc(var(--baseY) + var(--typeGap));
-  font-size: var(--typeSize);
+  margin-top: 10px;
+  font-size: 52px;
   color: var(--pink);
   animation-delay: 0.12s;
 }
 
 /* PLATFORM */
 #platformLine {
-  top: calc(var(--baseY) + var(--typeGap));
-  font-size: var(--typeSize);
+  margin-top: 12px;
+  font-size: 26px;
   color: var(--pink);
   letter-spacing: 2px;
   --maxOpacity: 0.85;
@@ -91,8 +96,8 @@ html, body {
 
 /* SUBTEXT */
 #subtext {
-  top: calc(var(--baseY) + var(--typeGap));
-  font-size: var(--typeSize);
+  margin-top: 14px;
+  font-size: 28px;
   color: var(--purple);
   letter-spacing: 1px;
   --maxOpacity: 0.85;
@@ -108,24 +113,12 @@ html, body {
   100% {opacity: 0;}
 }
 
-/* =========================================
-   PORTRAIT (1080x1920) OVERRIDES
-   Bigger type + move the block up a bit
-   ========================================= */
-@media (max-aspect-ratio: 9/16) {
+@media (max-height: 700px){
   :root{
-    /* nudge the whole alert up so it's not too low on tall canvas */
-    --baseY: 520px;
-
-    /* scale text up for portrait readability */
-    --typeSize: 64px;
-    --userSize: 78px;
-    --platSize: 40px;
-    --subSize: 44px;
-
-    /* slightly more spacing */
-    --userGap: 78px;
-    --platGap: 170px;
-    --subGap: 240px;
+    --baseY: 250px;
+    --typeSize: 40px;
+    --userSize: 52px;
+    --platSize: 26px;
+    --subSize: 28px;
   }
 }
