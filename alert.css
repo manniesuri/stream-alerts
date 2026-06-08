@@ -64,7 +64,7 @@ html, body {
   font-family: "Segoe UI Semibold", "Segoe UI", Arial, sans-serif;
   text-shadow: 0 0 10px var(--shadow);
   --maxOpacity: 1;
-  animation: alertFade 5s cubic-bezier(0.33, 0, 0.67, 1) forwards;
+  animation: alertFade 10s cubic-bezier(0.33, 0, 0.67, 1) forwards;
 }
 
 /* ALERT TYPE */
@@ -104,12 +104,12 @@ html, body {
   animation-delay: 0.28s;
 }
 
-/* 5s fade timing aligned to your AE keyframes */
+/* 10s fade timing aligned to your AE keyframes */
 @keyframes alertFade {
   0%   {opacity: 0;}
-  26%  {opacity: 0;}
-  33%  {opacity: var(--maxOpacity);}
-  87%  {opacity: var(--maxOpacity);}
+  8%  {opacity: 0;}
+  15%  {opacity: var(--maxOpacity);}
+  88%  {opacity: var(--maxOpacity);}
   100% {opacity: 0;}
 }
 
